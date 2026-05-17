@@ -3,18 +3,470 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Open LMX</title>
+  <meta name="description" content="Open LMX is an open learning experience management system for teams, schools, and communities.">
+  <title>Open LMX | Learning Experience Management System</title>
   <style>
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0f172a;color:#f8fafc;display:grid;min-height:100vh;place-items:center;text-align:center;padding:2rem}
-    main{max-width:760px}
-    h1{font-size:clamp(2.5rem,8vw,5rem);margin:0 0 1rem}
-    p{font-size:1.2rem;color:#cbd5e1;line-height:1.6}
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-strong: #111827;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --soft: #94a3b8;
+      --brand: #38bdf8;
+      --brand-2: #a78bfa;
+      --ok: #34d399;
+      --border: rgba(148, 163, 184, 0.2);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.24), transparent 32rem),
+        radial-gradient(circle at 80% 10%, rgba(167, 139, 250, 0.22), transparent 30rem),
+        linear-gradient(180deg, #07111f 0%, #0f172a 58%, #111827 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 17, 31, 0.78);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav, section, footer {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.15rem;
+    }
+
+    .logo {
+      width: 2.25rem;
+      height: 2.25rem;
+      display: grid;
+      place-items: center;
+      border-radius: 0.85rem;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #06101d;
+      font-weight: 900;
+      box-shadow: 0 12px 36px rgba(56, 189, 248, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 0.82rem 1.15rem;
+      font-weight: 750;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #06101d;
+      box-shadow: 0 16px 48px rgba(56, 189, 248, 0.22);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: 3rem;
+      align-items: center;
+      min-height: 82vh;
+      padding: 5rem 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      color: #bae6fd;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: 999px;
+      padding: 0.38rem 0.7rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 1.3rem;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 5.8rem);
+      line-height: 0.95;
+      margin: 0 0 1.35rem;
+      letter-spacing: -0.075em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #e0f2fe, #93c5fd 40%, #c4b5fd 82%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.32rem);
+      max-width: 680px;
+      margin: 0 0 2rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .trust {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+      color: var(--soft);
+      font-size: 0.9rem;
+    }
+
+    .trust span {
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 0.85rem;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .dashboard {
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .screen {
+      background: rgba(2, 6, 23, 0.8);
+      border-radius: 1.45rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .screen-top {
+      display: flex;
+      gap: 0.45rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--soft); opacity: 0.7; }
+
+    .screen-body { padding: 1.15rem; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .metric, .module, .panel {
+      border: 1px solid var(--border);
+      border-radius: 1.15rem;
+      background: rgba(15, 23, 42, 0.72);
+      padding: 1rem;
+    }
+
+    .metric strong { display: block; font-size: 1.65rem; line-height: 1; }
+    .metric small, .module small { color: var(--soft); }
+
+    .progress {
+      height: 0.5rem;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+      margin-top: 0.8rem;
+    }
+
+    .progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--brand), var(--ok)); border-radius: inherit; }
+
+    .module + .module { margin-top: 0.8rem; }
+
+    .section-pad { padding: 4.5rem 0; }
+
+    .section-heading {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.04;
+      letter-spacing: -0.055em;
+      margin: 0 0 1rem;
+    }
+
+    .section-heading p { color: var(--muted); font-size: 1.08rem; margin: 0; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      min-height: 100%;
+      border: 1px solid var(--border);
+      border-radius: 1.4rem;
+      padding: 1.35rem;
+      background: rgba(15, 23, 42, 0.62);
+    }
+
+    .icon {
+      width: 2.6rem;
+      height: 2.6rem;
+      display: grid;
+      place-items: center;
+      border-radius: 0.9rem;
+      margin-bottom: 1rem;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      color: #bae6fd;
+      font-weight: 900;
+    }
+
+    .card h3, .panel h3 { margin: 0 0 0.55rem; font-size: 1.1rem; }
+    .card p, .panel p { margin: 0; color: var(--muted); }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .list {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .list div {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      color: var(--muted);
+    }
+
+    .check { color: var(--ok); font-weight: 900; }
+
+    .timeline {
+      counter-reset: step;
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .timeline .panel {
+      position: relative;
+      padding-left: 4rem;
+    }
+
+    .timeline .panel::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 1.1rem;
+      top: 1.1rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #06101d;
+      font-weight: 900;
+    }
+
+    .cta {
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(167, 139, 250, 0.12));
+      box-shadow: var(--shadow);
+    }
+
+    .cta p { color: var(--muted); max-width: 660px; margin: 0 auto 1.5rem; }
+
+    footer {
+      padding: 2rem 0 3rem;
+      color: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 860px) {
+      .hero, .split { grid-template-columns: 1fr; }
+      .hero { padding: 3.5rem 0; }
+      .grid-3, .trust { grid-template-columns: 1fr; }
+      .nav-links a:not(.button) { display: none; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Open LMX</h1>
-    <p>Open learning, language, and machine intelligence infrastructure. Website coming soon.</p>
+  <header>
+    <nav aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="Open LMX home">
+        <span class="logo">L</span>
+        <span>Open LMX</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#roles">Roles</a>
+        <a class="button secondary" href="#start">Get started</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Open learning infrastructure</div>
+        <h1>Learning experience management for <span class="gradient-text">modern teams.</span></h1>
+        <p class="lead">Open LMX helps organizations design, deliver, track, and improve learning experiences across courses, cohorts, projects, and communities.</p>
+        <div class="actions">
+          <a class="button" href="#start">Launch your learning hub</a>
+          <a class="button secondary" href="#features">Explore capabilities</a>
+        </div>
+        <div class="trust" aria-label="Platform highlights">
+          <span>Course and cohort journeys</span>
+          <span>Skills, progress, and outcomes</span>
+          <span>Open, static, and easy to extend</span>
+        </div>
+      </div>
+
+      <aside class="dashboard" aria-label="Learning dashboard preview">
+        <div class="screen">
+          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="screen-body">
+            <div class="metric-grid">
+              <div class="metric"><strong>84%</strong><small>Completion rate</small><div class="progress"><span style="width:84%"></span></div></div>
+              <div class="metric"><strong>31</strong><small>Active learning paths</small><div class="progress"><span style="width:64%"></span></div></div>
+            </div>
+            <div class="module">
+              <strong>AI Product Management Cohort</strong><br>
+              <small>Next session: Portfolio review</small>
+              <div class="progress"><span style="width:72%"></span></div>
+            </div>
+            <div class="module">
+              <strong>Data Fluency Sprint</strong><br>
+              <small>12 learners need feedback</small>
+              <div class="progress"><span style="width:48%"></span></div>
+            </div>
+            <div class="module">
+              <strong>Leadership Essentials</strong><br>
+              <small>Outcome score improving</small>
+              <div class="progress"><span style="width:91%"></span></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="features" class="section-pad">
+      <div class="section-heading">
+        <h2>Everything needed to manage meaningful learning experiences.</h2>
+        <p>Move beyond content hosting. Coordinate learning paths, live sessions, feedback, projects, credentials, and performance insights in one experience layer.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card"><div class="icon">01</div><h3>Learning paths</h3><p>Design modular journeys with lessons, assignments, checkpoints, and milestones for every learner segment.</p></article>
+        <article class="card"><div class="icon">02</div><h3>Cohort operations</h3><p>Plan sessions, track attendance, manage mentors, and keep learners moving through structured programs.</p></article>
+        <article class="card"><div class="icon">03</div><h3>Outcome analytics</h3><p>See completion, engagement, confidence, skill growth, and feedback signals from a single dashboard.</p></article>
+        <article class="card"><div class="icon">04</div><h3>Project-based learning</h3><p>Collect submissions, review work, give feedback, and connect learning to real-world deliverables.</p></article>
+        <article class="card"><div class="icon">05</div><h3>Community layer</h3><p>Support discussions, peer groups, office hours, announcements, and learner support rituals.</p></article>
+        <article class="card"><div class="icon">06</div><h3>Open deployment</h3><p>Start as a fast static website and evolve into a full product with authentication, data, and APIs.</p></article>
+      </div>
+    </section>
+
+    <section id="workflow" class="section-pad split">
+      <div class="section-heading">
+        <h2>From curriculum to measurable progress.</h2>
+        <p>Open LMX is designed around the actual operating rhythm of learning teams.</p>
+        <div class="list">
+          <div><span class="check">✓</span><span>Build programs around outcomes, not just files and videos.</span></div>
+          <div><span class="check">✓</span><span>Give facilitators and mentors a clear view of learner progress.</span></div>
+          <div><span class="check">✓</span><span>Use feedback loops to improve every cohort.</span></div>
+        </div>
+      </div>
+      <div class="timeline">
+        <article class="panel"><h3>Map the experience</h3><p>Define audience, goals, skills, milestones, sessions, projects, and support moments.</p></article>
+        <article class="panel"><h3>Run the learning journey</h3><p>Publish modules, manage cohorts, capture submissions, and coordinate feedback.</p></article>
+        <article class="panel"><h3>Measure outcomes</h3><p>Track completion, engagement, assessment, learner sentiment, and business impact.</p></article>
+      </div>
+    </section>
+
+    <section id="roles" class="section-pad">
+      <div class="section-heading">
+        <h2>Built for every role in the learning ecosystem.</h2>
+      </div>
+      <div class="grid-3">
+        <article class="card"><div class="icon">L</div><h3>Learners</h3><p>Clear paths, upcoming tasks, project feedback, credentials, and progress they can understand.</p></article>
+        <article class="card"><div class="icon">M</div><h3>Mentors</h3><p>Review queues, learner context, feedback history, and signals for who needs help next.</p></article>
+        <article class="card"><div class="icon">A</div><h3>Admins</h3><p>Program setup, cohort management, reporting, content updates, and continuous improvement workflows.</p></article>
+      </div>
+    </section>
+
+    <section id="start" class="section-pad">
+      <div class="cta">
+        <h2>Start with the website. Grow into the platform.</h2>
+        <p>This first version establishes the public face of Open LMX. The next product layer can add learner accounts, program management, dashboards, assessments, and integrations.</p>
+        <a class="button" href="https://github.com/open-lmx/website">View the repository</a>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <span>© 2026 Open LMX</span>
+    <span>Learning Experience Management System</span>
+  </footer>
 </body>
 </html>
